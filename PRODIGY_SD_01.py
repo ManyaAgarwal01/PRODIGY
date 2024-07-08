@@ -1,62 +1,77 @@
-def celsius_to_fahrenheit(celsius):
-    return (celsius * 9/5) + 32
+from tkinter import *
 
-def celsius_to_kelvin(celsius):
-    return celsius + 273.15
+# functions
+def celsius_to_fahrenheit(celsius):
+    fahrenheit = (celsius * 9/5) + 32
+    return round(fahrenheit, 3)
 
 def fahrenheit_to_celsius(fahrenheit):
-    return (fahrenheit - 32) * 5/9
-
-def fahrenheit_to_kelvin(fahrenheit):
-    return (fahrenheit + 459.67) * 5/9
+    celsius = (fahrenheit - 32) * 5/9
+    return round(celsius, 3)
 
 def kelvin_to_celsius(kelvin):
-    return kelvin - 273.15
+    celsius = kelvin - 273.15
+    return round(celsius, 3)
 
-def kelvin_to_fahrenheit(kelvin):
-    return kelvin * 9/5 - 459.67
+def celsius_to_kelvin(celsius):
+    kelvin = celsius + 273.15
+    return round(kelvin, 3)
 
-def main():
-    print("Temperature Conversion Program")
-    print("Please select the current temperature unit:")
-    print("1. Celsius (°C)")
-    print("2. Fahrenheit (°F)")
-    print("3. Kelvin (K)")
-    
-    choice = input("Enter your choice (1/2/3): ")
-    
-    if choice == '1':
-        try:
-            celsius = float(input("Enter temperature in Celsius: "))
+def convert():
+    try:
+        celsius = celsius_input.get(1.0, END)
+        fahrenheit = fahrenheit_input.get(1.0, END)
+        kelvin = kelvin_input.get(1.0, END)
+
+        if len(celsius) > 1:
+            celsius = float(celsius)
             fahrenheit = celsius_to_fahrenheit(celsius)
             kelvin = celsius_to_kelvin(celsius)
-            print(f"{celsius}°C = {fahrenheit}°F")
-            print(f"{celsius}°C = {kelvin}K")
-        except ValueError:
-            print("Invalid input. Please enter a valid temperature value.")
-    
-    elif choice == '2':
-        try:
-            fahrenheit = float(input("Enter temperature in Fahrenheit: "))
-            celsius = fahrenheit_to_celsius(fahrenheit)
-            kelvin = fahrenheit_to_kelvin(fahrenheit)
-            print(f"{fahrenheit}°F = {celsius}°C")
-            print(f"{fahrenheit}°F = {kelvin}K")
-        except ValueError:
-            print("Invalid input. Please enter a valid temperature value.")
-    
-    elif choice == '3':
-        try:
-            kelvin = float(input("Enter temperature in Kelvin: "))
+        elif len(kelvin) > 1:
+            kelvin = float(kelvin)
             celsius = kelvin_to_celsius(kelvin)
-            fahrenheit = kelvin_to_fahrenheit(kelvin)
-            print(f"{kelvin}K = {celsius}°C")
-            print(f"{kelvin}K = {fahrenheit}°F")
-        except ValueError:
-            print("Invalid input. Please enter a valid temperature value.")
-    
-    else:
-        print("Invalid choice. Please enter 1, 2, or 3.")
+            fahrenheit = celsius_to_fahrenheit(celsius)
+        elif len(fahrenheit) > 1:
+            fahrenheit = float(fahrenheit)
+            celsius = fahrenheit_to_celsius(fahrenheit)
+            kelvin = celsius_to_kelvin(celsius)
 
-if __name__ == "__main__":
-    main()
+        celsius_input.delete(1.0, END)
+        celsius_input.insert(END, celsius)
+        fahrenheit_input.delete(1.0, END)
+        fahrenheit_input.insert(END, fahrenheit)
+        kelvin_input.delete(1.0, END)
+        kelvin_input.insert(END, kelvin)
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+def clear():
+    celsius_input.delete(1.0, END)
+    fahrenheit_input.delete(1.0, END)
+    kelvin_input.delete(1.0, END)
+
+# window
+root = Tk()
+root.geometry('600x400')
+root.resizable(0, 0)
+root.config(bg='light gray')  
+root.title("Convert Temperature")
+
+Label(root, text="Celsius", font='calibri 20 bold', fg='black', bg='light gray').place(x=50, y=50)
+Label(root, text="Fahrenheit", font='calibri 20 bold', fg='black', bg='light gray').place(x=50, y=125)
+Label(root, text="Kelvin", font='calibri 20 bold', fg='black', bg='light gray').place(x=50, y=200)
+
+celsius_input = Text(root, font='calibri 20', height=1, wrap=WORD, padx=5, pady=5, bg='light blue')
+celsius_input.place(x=225, y=50)
+fahrenheit_input = Text(root, font='calibri 20', height=1, wrap=WORD, padx=5, pady=5, bg='light blue')
+fahrenheit_input.place(x=225, y=125)
+kelvin_input = Text(root, font='calibri 20', height=1, wrap=WORD, padx=5, pady=5, bg='light blue')
+kelvin_input.place(x=225, y=200)
+
+clearBtn = Button(root, text='Clear', font='arial 22 bold', padx=5, pady=5, command=clear, bg='light coral', fg='black')
+clearBtn.place(x=300, y=300)
+convertBtn = Button(root, text='Convert', font='arial 22 bold', padx=5, pady=5, command=convert, bg='light green', fg='black')
+convertBtn.place(x=150, y=300)
+
+root.mainloop()
